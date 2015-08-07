@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <title>My Location</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <style type="text/css" media="screen">
+      @import url(https://fonts.googleapis.com/css?family=Droid+Sans:regular,bold);
+      body,html,#mapdiv{width:100%;height:100%;padding:0;margin:0;font-family:'Droid Sans';font-size:12px;}
+      .olControlAttribution{bottom:3px !important;background:#fff;opacity:0.85;padding:2px;font-weight:bold;}
+      #lastupdated{ position:absolute; left:3px; top:3px; background:#fff; padding:10px; opacity:0.9; z-index:999; border-radius:10px;  border:1px solid #999; box-shadow: #999 0px 0px 10px; }
+      .olControlAttribution a{color:#009 !important; text-decoration:none;}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
+    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      currentlocation = null;
+      icon = null;
+      markers = null;
+      zoom = 1;
+
+      $(function(){
+        map = new OpenLayers.Map("mapdiv", {
+          controls: [
+            new OpenLayers.Control.ArgParser(),
+            new OpenLayers.Control.Attribution()
+          ]
+        });
+        map.addLayer(new OpenLayers.Layer.OSM());
+
+        var lonLat = new OpenLayers.LonLat( 0.0, 0.0 )
+              .transform(
+                new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                map.getProjectionObject() // to Spherical Mercator Projection
+              );
+
+        markers = new OpenLayers.Layer.Markers( "Markers" );
+        map.addLayer(markers);
+
+        var b = 76; var h = 82;
+        var tb = 70; var th = h * (tb / b);
+        var t = (th - 3) * -1;
+        var l = 0.5 * tb * -1;
+
+        var size = new OpenLayers.Size(tb,th);
+        var offset = new OpenLayers.Pixel(l, t);
+        icon = new OpenLayers.Icon('http://test.knut.me/markerimage.png?email={{ email }}', size, offset);
+        currentlocation = new OpenLayers.Marker(lonLat, icon);
+        markers.addMarker(currentlocation);
+
+        map.setCenter (lonLat, zoom);
+        setInterval('updateData()', 10000);
+        updateData();
+
+        $(window).bind('resize', function(){ pos_layer(); });
+      });
+
+      function updateData() {
+        $.getJSON('{{ user }}.json', function(data){
+          writeData(data);
+        });
+      }
+
+      function writeData(data) {
+        if(data.date == undefined) {
+          return;
+        }
+        $('#lastupdated').html('');
+        $('#lastupdated').append('<strong>Stand:</strong> ' + data.date + ' UTC<br/>');
+        if(Math.round(data.speed) > 0) {
+          $('#lastupdated').append('<strong>Geschwindigkeit:</strong> ' + data.display_speed + '<br/>');
+        }
+        if(data.place != undefined) {
+          $('#lastupdated').append('<strong>Location:</strong> ' + data.place.formatted_address + '<br/>');
+        }
+        $('#lastupdated').append('<span style="font-size:9px;font-weight:normal;">Abfrage: ' + data.now + ' UTC</span>');
+        $('#lastupdated').show();
+
+        if(data.speed > 100) {
+          zoom = 12;
+        }
+        else if(data.speed > 50) {
+          zoom = 14;
+        }
+        else {
+          zoom = 16;
+        }
+
+        var lonLat = new OpenLayers.LonLat( data.longitude, data.latitude )
+              .transform(
+                new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                map.getProjectionObject() // to Spherical Mercator Projection
+              );
+        markers.removeMarker(currentlocation);
+        map.setCenter (lonLat, zoom);
+        currentlocation = new OpenLayers.Marker(lonLat, icon);
+        markers.addMarker(currentlocation);
+        pos_layer();
+      }
+
+      function pos_layer() {
+        var imagediv = $(currentlocation.icon.imageDiv);
+        var self = $('#lastupdated');
+        var left = (imagediv.offset().left + imagediv.outerWidth() / 2) - (self.outerWidth() / 2);
+        var top = imagediv.offset().top - self.outerHeight() - 20;
+
+        if(top < 0) {
+          top = imagediv.offset().top + imagediv.outerHeight() + 20;
+        }
+
+        if(top + self.outerHeight() > $(window).height()) {
+          top = 10;
+          left = 10;
+        }
+
+        self.animate({
+          'top' : top + 'px',
+          'left' : left + 'px'
+        }, 200);
+      }
+
+    </script>
+  </head>
+  <body>
+    <div id="lastupdated">Loading Data...</div>
+    <div id="mapdiv"></div>
+  </body>
+</html>
