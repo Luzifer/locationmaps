@@ -61,6 +61,17 @@ func handleGetLatest(res http.ResponseWriter, r *http.Request) {
 }
 
 func handleSimpleAdd(res http.ResponseWriter, r *http.Request) {
+	usr, ok := users.Users[r.FormValue("user")]
+	if !ok {
+		http.Error(res, "User not found.", http.StatusNotFound)
+		return
+	}
+
+	if r.FormValue("token") != usr.Token {
+		http.Error(res, "Invalid token.", http.StatusForbidden)
+		return
+	}
+
 	ll := strings.Split(r.FormValue("location"), ",")
 	if len(ll) != 2 {
 		http.Error(res, "Invalid location", http.StatusBadRequest)
