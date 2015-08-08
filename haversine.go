@@ -3,7 +3,6 @@ package main
 import "math"
 
 const (
-	kmtomiles   = float64(0.621371192)
 	earthRadius = float64(6371)
 )
 

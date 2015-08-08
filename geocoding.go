@@ -56,9 +56,11 @@ func geocodeCoordinate(lat, lon float64) string {
 	}
 
 	osmNominatim := fmt.Sprintf("http://nominatim.openstreetmap.org/reverse?format=json&lat=%.4f&lon=%.4f", lat, lon)
+
 	req, _ := http.NewRequest("GET", osmNominatim, nil)
 	req.Header.Set("Accept-Language", "en-US")
 	req.Header.Set("User-Agent", fmt.Sprintf("Mozilla/5.0 (compatible; Locationmaps/%s; +https://github.com/Luzifer/locationmaps)", version))
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Printf("Unable to retrieve nominatim data: %s\n", err)
