@@ -60,6 +60,38 @@ func handleGetLatest(res http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleGPXAdd(res http.ResponseWriter, r *http.Request) {
+	usr, ok := users.Users[r.FormValue("user")]
+	if !ok {
+		http.Error(res, "User not found.", http.StatusNotFound)
+		return
+	}
+
+	if r.FormValue("token") != usr.Token {
+		http.Error(res, "Invalid token.", http.StatusForbidden)
+		return
+	}
+
+	file, _, err := r.FormFile("gpxfile")
+	if err != nil {
+		http.Error(res, "Unable to read GPX file", http.StatusBadRequest)
+		return
+	}
+
+	g, err := parseGPXInput(file)
+	if err != nil {
+		http.Error(res, fmt.Sprintf("Unable to parse GPX file: %s", err), http.StatusInternalServerError)
+		return
+	}
+	err = addPositionsToMonthArchives(usr.Name, extractPositionsFromGPX(g))
+	if err != nil {
+		http.Error(res, fmt.Sprintf("Unable to save GPX positions: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	http.Error(res, "OK", http.StatusOK)
+}
+
 func handleSimpleAdd(res http.ResponseWriter, r *http.Request) {
 	usr, ok := users.Users[r.FormValue("user")]
 	if !ok {

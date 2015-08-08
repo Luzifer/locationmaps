@@ -61,6 +61,8 @@ func main() {
 
 	r.HandleFunc("/api/v1/simple.add", handleSimpleAdd).
 		Methods("POST")
+	r.HandleFunc("/api/v1/gpx.add", handleGPXAdd).
+		Methods("POST")
 
 	r.PathPrefix("/assets").Handler(http.FileServer(&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""})).
 		Methods("GET")
