@@ -1,7 +1,9 @@
-VERSION = $(shell git rev-parse --short HEAD)
+VERSION = $(shell git describe --tags)
 
-build: assets/ol.js
+bindata: assets/ol.js
 	go generate
+
+build:
 	docker run -v $(CURDIR):/src -e LDFLAGS="-X main.version $(VERSION)" centurylink/golang-builder:latest
 
 container: build ca-certificates.pem
