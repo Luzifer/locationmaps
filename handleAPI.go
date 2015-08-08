@@ -43,12 +43,13 @@ func handleGetLatest(res http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := currentDataResponse{
-		Now:       currentDataTime{Time: time.Now()},
-		Date:      currentDataTime{Time: current.Time},
+		Now:       currentDataTime{Time: time.Now().UTC()},
+		Date:      currentDataTime{Time: current.Time.UTC()},
 		Distance:  haversine(current.Longitude, current.Latitude, last.Longitude, last.Latitude),
 		TimeDelta: current.Time.Unix() - last.Time.Unix(),
 		Latitude:  current.Latitude,
 		Longitude: current.Longitude,
+		Place:     geocodeCoordinate(current.Latitude, current.Longitude),
 	}
 	resp.Speed = resp.Distance / (float64(resp.TimeDelta) / 3600.0)
 	resp.DisplaySpeed = fmt.Sprintf("%.2f km/h", resp.Speed)

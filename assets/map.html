@@ -70,7 +70,7 @@
           $('#lastupdated').append('<strong>Geschwindigkeit:</strong> ' + data.display_speed + '<br/>');
         }
         if(data.place != undefined) {
-          $('#lastupdated').append('<strong>Location:</strong> ' + data.place.formatted_address + '<br/>');
+          $('#lastupdated').append('<strong>Location:</strong> ' + data.place + '<br/>');
         }
         $('#lastupdated').append('<span style="font-size:9px;font-weight:normal;">Abfrage: ' + data.now + ' UTC</span>');
         $('#lastupdated').show();
