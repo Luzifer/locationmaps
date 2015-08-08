@@ -2,6 +2,8 @@ package main
 
 import "time"
 
+// +++ COUCHDB MONTHLY ARCHIVE +++
+
 type monthDataArchive struct {
 	ID  string `json:"_id"`
 	Rev string `json:"_rev,omitempty"`
@@ -20,6 +22,25 @@ type positionByTime []position
 func (b positionByTime) Len() int           { return len(b) }
 func (b positionByTime) Swap(i, j int)      { b[i], b[j] = b[j], b[i] }
 func (b positionByTime) Less(i, j int) bool { return b[i].Time.Before(b[j].Time) }
+
+// +++ COUCHDB USER FILE +++
+
+type userDatabase struct {
+	ID  string `json:"_id"`
+	Rev string `json:"_rev,omitempty"`
+
+	Users map[string]user `json:"users"`
+}
+
+type user struct {
+	Name      string `json:"name"`
+	EMail     string `json:"email"`
+	Token     string `json:"token"`
+	Protected bool   `json:"protected"`
+	ViewToken string `json:"view_token"`
+}
+
+// +++ WEB DATA TRANSFER FORMAT FOR FRONTEND +++
 
 type currentDataResponse struct {
 	Now          currentDataTime `json:"now"`

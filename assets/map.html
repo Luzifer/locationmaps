@@ -43,7 +43,7 @@
 
         var size = new OpenLayers.Size(tb,th);
         var offset = new OpenLayers.Pixel(l, t);
-        icon = new OpenLayers.Icon('http://test.knut.me/markerimage.png?email={{ email }}', size, offset);
+        icon = new OpenLayers.Icon('{{user}}.png', size, offset);
         currentlocation = new OpenLayers.Marker(lonLat, icon);
         markers.addMarker(currentlocation);
 

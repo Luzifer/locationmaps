@@ -43,14 +43,22 @@ func init() {
 }
 
 func main() {
+	if err := loadUserDB(); err != nil {
+		fmt.Printf("Error while loading userdb: %s\n", err)
+		os.Exit(1)
+	}
+	fmt.Printf("%+v\n", users)
+
 	r := mux.NewRouter()
 
 	r.HandleFunc("/{user:.+}.html", handleMap).
 		Methods("GET")
 	r.HandleFunc("/{user:.+}.json", handleGetLatest).
 		Methods("GET")
+	r.HandleFunc("/{user:.+}.png", handleGetMarkerImage).
+		Methods("GET")
 
-	r.HandleFunc("/simple.add", handleSimpleAdd).
+	r.HandleFunc("/api/v1/simple.add", handleSimpleAdd).
 		Methods("POST")
 
 	http.ListenAndServe(config.Listen, r)

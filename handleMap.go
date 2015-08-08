@@ -10,6 +10,13 @@ import (
 
 func handleMap(res http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+
+	usr, ok := users.Users[vars["user"]]
+	if !ok {
+		http.Error(res, "User not found.", http.StatusNotFound)
+		return
+	}
+
 	tplString, err := Asset("assets/map.html")
 	if err != nil {
 		fmt.Printf("Unable to load asset map.html: %s\n", err)
@@ -24,7 +31,7 @@ func handleMap(res http.ResponseWriter, r *http.Request) {
 	}
 
 	data, err := tpl.Execute(pongo2.Context{
-		"user": vars["user"],
+		"user": usr.Name,
 	})
 	if err != nil {
 		fmt.Printf("Unable to execute map.html: %s\n", err)
