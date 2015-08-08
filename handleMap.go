@@ -17,6 +17,11 @@ func handleMap(res http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if usr.Protected && usr.ViewToken != r.URL.Query().Get("token") {
+		http.Error(res, "User not found.", http.StatusNotFound)
+		return
+	}
+
 	tplString, err := Asset("assets/map.html")
 	if err != nil {
 		fmt.Printf("Unable to load asset map.html: %s\n", err)
