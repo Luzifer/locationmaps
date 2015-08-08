@@ -48,5 +48,6 @@ func handleGetMarkerImage(res http.ResponseWriter, r *http.Request) {
 	draw.Draw(dstImage, dstRect, gravatar, image.Pt(0, 0), draw.Src)
 
 	res.Header().Set("Content-Type", "image/png")
+	res.Header().Set("Cache-Control", "public, max-age=3600")
 	png.Encode(res, dstImage)
 }
