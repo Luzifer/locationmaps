@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/Luzifer/rconfig"
+	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/gorilla/mux"
 	"github.com/lancecarlson/couchgo"
 )
@@ -60,6 +61,9 @@ func main() {
 
 	r.HandleFunc("/api/v1/simple.add", handleSimpleAdd).
 		Methods("POST")
+
+	r.PathPrefix("/assets").Handler(http.FileServer(&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""})).
+		Methods("GET")
 
 	http.ListenAndServe(config.Listen, r)
 }

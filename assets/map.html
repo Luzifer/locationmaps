@@ -4,14 +4,19 @@
     <title>My Location</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <style type="text/css" media="screen">
-      @import url(https://fonts.googleapis.com/css?family=Droid+Sans:regular,bold);
-      body,html,#mapdiv{width:100%;height:100%;padding:0;margin:0;font-family:'Droid Sans';font-size:12px;}
+      @import url(https://fonts.googleapis.com/css?family=Roboto:regular,bold);
+      body,html,#mapdiv{width:100%;height:100%;padding:0;margin:0;font-family:'Roboto';font-size:12px;}
       .olControlAttribution{bottom:3px !important;background:#fff;opacity:0.85;padding:2px;font-weight:bold;}
       #lastupdated{ position:absolute; left:3px; top:3px; background:#fff; padding:10px; opacity:0.9; z-index:999; border-radius:10px;  border:1px solid #999; box-shadow: #999 0px 0px 10px; }
       .olControlAttribution a{color:#009 !important; text-decoration:none;}
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  </head>
+  <body>
+    <div id="lastupdated">Loading Data...</div>
+    <div id="mapdiv"></div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="/assets/ol.js"></script>
     <script type="text/javascript" charset="utf-8">
       currentlocation = null;
       icon = null;
@@ -119,9 +124,5 @@
       }
 
     </script>
-  </head>
-  <body>
-    <div id="lastupdated">Loading Data...</div>
-    <div id="mapdiv"></div>
   </body>
 </html>
