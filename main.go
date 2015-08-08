@@ -1,5 +1,7 @@
 package main // import "github.com/Luzifer/locationmaps"
 
+//go:generate go-bindata assets
+
 import (
 	"fmt"
 	"net/http"

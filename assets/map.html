@@ -65,14 +65,14 @@
           return;
         }
         $('#lastupdated').html('');
-        $('#lastupdated').append('<strong>Stand:</strong> ' + data.date + ' UTC<br/>');
+        $('#lastupdated').append('<strong>Data from </strong> ' + data.date + '<br/>');
         if(Math.round(data.speed) > 0) {
-          $('#lastupdated').append('<strong>Geschwindigkeit:</strong> ' + data.display_speed + '<br/>');
+          $('#lastupdated').append('<strong>Speed:</strong> ' + data.display_speed + '<br/>');
         }
         if(data.place != undefined) {
           $('#lastupdated').append('<strong>Location:</strong> ' + data.place + '<br/>');
         }
-        $('#lastupdated').append('<span style="font-size:9px;font-weight:normal;">Abfrage: ' + data.now + ' UTC</span>');
+        $('#lastupdated').append('<span style="font-size:9px;font-weight:normal;">Refreshed at ' + data.now + '</span>');
         $('#lastupdated').show();
 
         if(data.speed > 100) {

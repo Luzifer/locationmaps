@@ -38,5 +38,5 @@ type currentDataTime struct {
 }
 
 func (c currentDataTime) MarshalJSON() ([]byte, error) {
-	return []byte("\"" + c.Format("02.01.2006 15:04:05") + "\""), nil
+	return []byte("\"" + c.Format("2006-01-02 15:04:05 MST") + "\""), nil
 }
