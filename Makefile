@@ -10,8 +10,9 @@ container: build ca-certificates.pem
 	docker build -t luzifer/locationmaps .
 
 ca-certificates.pem:
-		curl -s https://pki.google.com/roots.pem | grep -v "^#" | grep -v "^$$" > $@
-		shasum $@
+	curl -ssLo certdata.txt https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckfw/builtins/certdata.txt
+	./extract-nss-root-certs > ca-certificates.pem
+	rm certdata.txt
 
 assets/ol.js:
 	curl -ssLo assets/ol.js http://www.openlayers.org/api/OpenLayers.js
