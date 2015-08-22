@@ -52,6 +52,7 @@ type currentDataResponse struct {
 	Latitude     float64         `json:"latitude"`
 	Longitude    float64         `json:"longitude"`
 	Place        string          `json:"place,omitempty"`
+	Timestamp    int64           `json:"timestamp"`
 }
 
 type currentDataTime struct {
