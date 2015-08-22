@@ -6,13 +6,8 @@ bindata: assets/ol.js
 build:
 	docker run -v $(CURDIR):/src -e LDFLAGS="-X main.version $(VERSION)" centurylink/golang-builder:latest
 
-container: build ca-certificates.pem
+container: build
 	docker build -t luzifer/locationmaps .
-
-ca-certificates.pem:
-	curl -ssLo certdata.txt https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckfw/builtins/certdata.txt
-	./extract-nss-root-certs > ca-certificates.pem
-	rm certdata.txt
 
 assets/ol.js:
 	curl -ssLo assets/ol.js http://www.openlayers.org/api/OpenLayers.js
