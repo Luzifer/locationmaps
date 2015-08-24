@@ -42,9 +42,9 @@ func handleGetLatest(res http.ResponseWriter, r *http.Request) {
 		last = archive.Positions[0]
 	}
 
-	resp := currentDataResponse{
-		Now:       currentDataTime{Time: time.Now().UTC()},
-		Date:      currentDataTime{Time: current.Time.UTC()},
+	resp := CurrentDataResponse{
+		Now:       CurrentDataTime{Time: time.Now().UTC()},
+		Date:      CurrentDataTime{Time: current.Time.UTC()},
 		Distance:  haversine(current.Longitude, current.Latitude, last.Longitude, last.Latitude),
 		TimeDelta: current.Time.Unix() - last.Time.Unix(),
 		Latitude:  current.Latitude,
