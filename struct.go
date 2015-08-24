@@ -42,10 +42,9 @@ type user struct {
 
 // +++ WEB DATA TRANSFER FORMAT FOR FRONTEND +++
 
-// CurrentDataResponse represents the response object of the current data for an user
-type CurrentDataResponse struct {
-	Now          CurrentDataTime `json:"now"`
-	Date         CurrentDataTime `json:"date"`
+type currentDataResponse struct {
+	Now          currentDataTime `json:"now"`
+	Date         currentDataTime `json:"date"`
 	Distance     float64         `json:"distance"`
 	TimeDelta    int64           `json:"timedelta"`
 	Speed        float64         `json:"speed"`
@@ -56,22 +55,10 @@ type CurrentDataResponse struct {
 	Timestamp    int64           `json:"timestamp"`
 }
 
-// CurrentDataTime represents a special time format for the response
-type CurrentDataTime struct {
+type currentDataTime struct {
 	time.Time
 }
 
-// MarshalJSON implements JSON marshalling
-func (c *CurrentDataTime) MarshalJSON() ([]byte, error) {
-	return []byte(c.Format("\"2006-01-02 15:04:05 MST\"")), nil
-}
-
-// UnmarshalJSON implements JSON unmarshalling
-func (c *CurrentDataTime) UnmarshalJSON(in []byte) error {
-	t, err := time.Parse("\"2006-01-02 15:04:05 MST\"", string(in))
-	if err != nil {
-		return err
-	}
-	*c = CurrentDataTime{Time: t}
-	return nil
+func (c currentDataTime) MarshalJSON() ([]byte, error) {
+	return []byte("\"" + c.Format("2006-01-02 15:04:05 MST") + "\""), nil
 }
